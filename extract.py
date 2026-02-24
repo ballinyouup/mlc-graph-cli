@@ -42,19 +42,42 @@ async def process_review(local_idx, global_idx, review, total_split_reviews, eng
     print(f"Product: {review['product_id']} | Rating: {review['rating']}")
     print(f"Text: {review['text']}")
 
-    response = await engine.send_extract_message(f"Text: {review['text']}")
-    output = response.choices[0].message.content
+    max_retries = 10
+    for attempt in range(max_retries):
+        response = await engine.send_extract_message(f"Text: {review['text']}")
+        output = response.choices[0].message.content
 
-    try:
-        parsed_json = json.loads(output)
-        parsed_json["user_id"] = review["user_id"]
-        parsed_json["product_id"] = review["product_id"]
-        with open(output_path, "a") as f:
-            f.write(json.dumps(parsed_json) + "\n")
-    except json.JSONDecodeError:
-        print(f"Warning: Model output for global review {global_idx} was not valid JSON.")
+        try:
+            parsed_json = json.loads(output)
+            
+            # Handle case where model returns a list instead of dict
+            if isinstance(parsed_json, list):
+                print(f"Warning: Model returned list instead of dict on attempt {attempt + 1}. Retrying...")
+                continue
+            
+            # Handle case where model returns dict without "triples" key
+            if "triples" not in parsed_json:
+                print(f"Warning: Model output missing 'triples' key on attempt {attempt + 1}. Retrying...")
+                continue
+            
+            # Success - add metadata and write
+            parsed_json["user_id"] = review["user_id"]
+            parsed_json["product_id"] = review["product_id"]
+            with open(output_path, "a") as f:
+                f.write(json.dumps(parsed_json) + "\n")
+            
+            print(f"Triples:\n{output}")
+            break
+            
+        except json.JSONDecodeError:
+            print(f"Warning: Model output was not valid JSON on attempt {attempt + 1}.")
+            if attempt == max_retries - 1:
+                print(f"Failed to get valid output for global review {global_idx} after {max_retries} attempts.")
+        except (TypeError, KeyError) as e:
+            print(f"Warning: Unexpected error on attempt {attempt + 1}: {e}")
+            if attempt == max_retries - 1:
+                print(f"Failed to process global review {global_idx} after {max_retries} attempts.")
 
-    print(f"Triples:\n{output}")
     pbar.update(1)
 
 
