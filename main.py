@@ -4,7 +4,7 @@ from pathlib import Path
 
 from tqdm.asyncio import tqdm_asyncio
 from engine import Engine, ModelChoice
-from extract import process_review, load_reviews
+from extract import process_review, load_reviews, load_completed_indices
 
 import argparse
 
@@ -62,13 +62,23 @@ async def main():
             default=f"./PGraphRAG/output/{extract_file}_output.jsonl",
         ).ask_async())
 
-        print(f"Processing {total_reviews} reviews -> {output_path}")
+        # Resume support: skip already-completed reviews
+        completed = load_completed_indices(output_path)
+        remaining = [(idx, review) for idx, review in enumerate(all_reviews, 1) if idx not in completed]
+
+        if completed:
+            print(f"Resuming: {len(completed)} already done, {len(remaining)} remaining")
+        print(f"Processing {len(remaining)}/{total_reviews} reviews -> {output_path}")
+
+        # Bounded concurrency to avoid overwhelming the engine
+        semaphore = asyncio.Semaphore(4)
+        write_lock = asyncio.Lock()
 
         # progress bar and async processing of reviews
-        with tqdm_asyncio(total=total_reviews, desc=f"Review", unit="review") as pbar:
+        with tqdm_asyncio(total=len(remaining), desc=f"Review", unit="review") as pbar:
             tasks = [
-                process_review(idx, review, engine, pbar, output_path)
-                for idx, review in enumerate(all_reviews, 1)
+                process_review(idx, review, engine, pbar, output_path, semaphore, write_lock)
+                for idx, review in remaining
             ]
             await asyncio.gather(*tasks)
 

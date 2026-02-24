@@ -1,7 +1,7 @@
 class Node:
-    def __init__(self, subject, relation, obj):
+    def __init__(self, subject, predicate, obj):
         self.subject = subject
-        self.relation = relation
+        self.predicate = predicate
         self.obj = obj
 
 class Graph:
