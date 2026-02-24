@@ -3,6 +3,9 @@
 # ignore all files except .txt files
 !/models/**/*.txt
 
+/PGraphRAG/*
+!/PGraphRAG/*.txt
+
 # Wheel files
 /wheels/*.whl
 
@@ -11,3 +14,5 @@
 
 # Environment variables
 .env
+
+*.db
