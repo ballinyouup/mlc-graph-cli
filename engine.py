@@ -1,21 +1,23 @@
-from mlc_llm import MLCEngine
+from mlc_llm import AsyncMLCEngine
 from enum import IntEnum
+
 
 # enum for model choice
 class ModelChoice(IntEnum):
     ministral_3b = 0
     phi_4_mini = 1
     qwen3_4b = 2
+    mistral_7b = 3
 
 
-class Engine(MLCEngine):
+class Engine(AsyncMLCEngine):
     model_choice = ModelChoice(0)
     models = ["./models/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC", "./models/Phi-4-mini-instruct-q4f32_1-MLC",
-              "models/Qwen3-4B-q4f16_1-MLC"]
-    
+              "./models/Qwen3-4B-q4f16_1-MLC", "./models/Mistral-7B-Instruct-v0.3-q4f16_1-MLC"]
+
     def __init__(self, device, model_choice=model_choice):
         super().__init__(model=Engine.models[model_choice], device=device)
-        self.engine_config.mode="server"
+        self.engine_config.mode = "server"
 
     def send_json_message(self, message, temperature=0.1, max_tokens=1024, frequency_penalty=0.1, presence_penalty=0.1):
         return self.chat.completions.create(
@@ -115,10 +117,8 @@ extract_schema = {
                     }
                 },
                 "required": ["subject", "predicate", "object"],
-                "additionalProperties": False
             }
         }
     },
     "required": ["triples"],
-    "additionalProperties": False
 }
