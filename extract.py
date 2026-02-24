@@ -13,6 +13,12 @@ def parse_args():
     parser.add_argument("--num-splits", type=int, default=4, help="Total number of dataset splits")
     parser.add_argument("--split-id", type=int, required=True, help="Which split this instance processes (0..num_splits-1)")
     parser.add_argument(
+        "--device",
+        type=str,
+        default="cpu",
+        help="Engine device backend (e.g. metal, cuda, vulkan, cpu)",
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path("./PGraphRAG/output"),
@@ -58,7 +64,7 @@ async def main():
     if not (0 <= args.split_id < args.num_splits):
         raise ValueError("--split-id must be in range [0, num_splits - 1]")
 
-    engine = Engine(device="metal", model_choice=Engine.model_choice.mistral_7b)
+    engine = Engine(device=args.device, model_choice=Engine.model_choice.mistral_7b)
 
     all_reviews = load_reviews(Path("./PGraphRAG/amazon_train.json"))
     split_reviews = get_split_reviews(all_reviews, args.num_splits, args.split_id)
