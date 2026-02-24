@@ -9,6 +9,7 @@ dependencies = [
         "tvm",
         "graphqlite>=0.3.5",
         "tqdm>=4.67.3",
+        "questionary>=2.1.1",
 ]
 # edit this to point to your wheels
 [tool.uv.sources]
