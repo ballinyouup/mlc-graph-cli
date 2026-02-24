@@ -61,8 +61,7 @@ async def process_review(idx, review, engine, pbar, output_path, semaphore, writ
                 
                 # Success - add metadata and write
                 parsed_json["idx"] = idx
-                parsed_json["user_id"] = review["user_id"]
-                parsed_json["product_id"] = review["product_id"]
+                parsed_json.update(review)
                 async with write_lock:
                     with open(output_path, "a") as f:
                         f.write(json.dumps(parsed_json) + "\n")
