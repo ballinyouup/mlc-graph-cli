@@ -8,12 +8,14 @@ class ModelChoice(IntEnum):
     phi_4_mini = 1
     qwen3_4b = 2
     mistral_7b = 3
+    hermes_3_llama_3_2_3b = 4
+    llama_3_2_3b = 5
 
 
 class Engine(AsyncMLCEngine):
     model_choice = ModelChoice(0)
     models = ["./models/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC", "./models/Phi-4-mini-instruct-q4f32_1-MLC",
-              "./models/Qwen3-4B-q4f16_1-MLC", "./models/Mistral-7B-Instruct-v0.3-q4f16_1-MLC"]
+              "./models/Qwen3-4B-q4f16_1-MLC", "./models/Mistral-7B-Instruct-v0.3-q4f16_1-MLC", "./models/Hermes-3-Llama-3.2-3B-q4f16_1-MLC", "./models/Llama-3.2-3B-Instruct-q4f32_1-MLC"]
 
     def __init__(self, device, model_choice=model_choice):
         super().__init__(model=Engine.models[model_choice], device=device)

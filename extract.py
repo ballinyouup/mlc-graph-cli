@@ -22,7 +22,7 @@ def parse_args():
         "--model",
         type=str,
         default="mistral_7b",
-        choices=["ministral_3b", "phi_4_mini", "qwen3_4b", "mistral_7b"],
+        choices=["ministral_3b", "phi_4_mini", "qwen3_4b", "mistral_7b", "hermes_3_llama_3_2_3b", "llama_3_2_3b"],
         help="Model to use for extraction",
     )
     parser.add_argument(
