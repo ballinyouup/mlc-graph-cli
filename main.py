@@ -62,6 +62,9 @@ async def main():
             default=f"./PGraphRAG/output/{extract_file}_output.jsonl",
         ).ask_async())
 
+        # Ensure output directory exists
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
         # Resume support: skip already-completed reviews
         completed = load_completed_indices(output_path)
         remaining = [(idx, review) for idx, review in enumerate(all_reviews, 1) if idx not in completed]
