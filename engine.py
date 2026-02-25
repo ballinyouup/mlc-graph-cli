@@ -19,7 +19,7 @@ class Engine(AsyncMLCEngine):
         super().__init__(model=Engine.models[model_choice], device=device)
         self.engine_config.mode = "server"
 
-    def send_json_message(self, message, temperature=0.1, max_tokens=2048, frequency_penalty=0.1, presence_penalty=0.1):
+    def send_json_message(self, message, temperature=0.1, max_tokens=4096, frequency_penalty=0.1, presence_penalty=0.1):
         return self.chat.completions.create(
             messages=[{"role": "user", "content": message}],
             stream=False,
@@ -39,7 +39,7 @@ class Engine(AsyncMLCEngine):
             max_tokens=max_tokens,
         )
 
-    def send_extract_message(self, message, temperature=0.3, max_tokens=2048):
+    def send_extract_message(self, message, temperature=0.3, max_tokens=4096):
         self.set_system_prompt(extract_system_prompt)
         return self.send_json_message(message, temperature, max_tokens)
 
