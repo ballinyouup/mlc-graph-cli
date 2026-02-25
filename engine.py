@@ -39,7 +39,7 @@ class Engine(AsyncMLCEngine):
             max_tokens=max_tokens,
         )
 
-    def send_extract_message(self, message, temperature=0.3, max_tokens=4096):
+    def send_extract_message(self, message, temperature=0.5, max_tokens=4096):
         self.set_system_prompt(extract_system_prompt)
         return self.send_json_message(message, temperature, max_tokens)
 
