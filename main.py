@@ -42,7 +42,7 @@ async def main():
         await run_extraction(
             args,
             send_fn=engine.send_extract_message,
-            default_concurrency=4,
+            default_concurrency=16,
             cleanup_fn=engine.terminate,
         )
     elif task == task_choices[1]:
