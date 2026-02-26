@@ -13,7 +13,7 @@ wget https://github.com/PGraphRAG-benchmark/PGR-LLM/raw/refs/heads/main/data_spl
 wget https://github.com/PGraphRAG-benchmark/PGR-LLM/raw/refs/heads/main/data_splits/amazon_test.json
 
 # Hotel Reviews dataset from Kaggle.
-wget https://github.com/PGraphRAG-benchmark/PGR-LLM/raw/refs/heads/main/data_splits/hotel_train.jsonl
+wget https://github.com/PGraphRAG-benchmark/PGraphRAG/blob/main/data_splits/hotel_train.json
 wget https://github.com/PGraphRAG-benchmark/PGR-LLM/raw/refs/heads/main/data_splits/hotel_dev.jsonl
 wget https://github.com/PGraphRAG-benchmark/PGR-LLM/raw/refs/heads/main/data_splits/hotel_test.jsonl
 
