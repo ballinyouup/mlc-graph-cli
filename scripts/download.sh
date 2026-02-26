@@ -27,7 +27,13 @@ wget https://github.com/PGraphRAG-benchmark/PGraphRAG/blob/main/data_splits/b2w_
 wget https://github.com/PGraphRAG-benchmark/PGraphRAG/blob/main/data_splits/b2w_dev.json
 wget https://github.com/PGraphRAG-benchmark/PGraphRAG/blob/main/data_splits/b2w_test.json
 
-# Download Ministral-3-3B-Instruct-2512 model from Huggingface.
+# Finetune: Download Ministral-3-3B-Instruct-2512 model from Huggingface.
 mkdir -p "$PROJECT_ROOT/models"
 cd "$PROJECT_ROOT/models"
 git clone https://huggingface.co/MistralAI/Ministral-3-3B-Instruct-2512
+
+# Extract: Download Ministral-3-3B-Instruct-2512 model from Huggingface.
+mkdir -p "$PROJECT_ROOT/models"
+cd "$PROJECT_ROOT/models"
+git clone https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC
+
